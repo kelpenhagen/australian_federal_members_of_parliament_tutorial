@@ -20,8 +20,11 @@ page.at(".search-filter-results").search(:li).each do |li|
     electorate: dts.select { |dt| dt.inner_text =~ /for/ }.first.next.next.inner_text
   }
 
-  p record
+  puts "Saving record for #{record[:name]}..."
+  ScraperWiki.save_sqlite([:name], record)
 end
+
+puts "Done."
 
 # # Find somehing on the page using css selectors
 # p page.at('div.content')
