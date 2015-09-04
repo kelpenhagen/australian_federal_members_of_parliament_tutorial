@@ -11,17 +11,17 @@ url = "http://www.aph.gov.au/Senators_and_Members/Parliamentarian_Search_Results
 
 page = agent.get(url)
 
-eric = page.at(".search-filter-results").search(:li).first
+page.at(".search-filter-results").search(:li).each do |li|
+  dts = li.at(:dl).search(:dt)
 
-dts = eric.at(:dl).search(:dt)
+  record = {
+    name: li.at(".title").inner_text,
+    party: dts.select { |dt| dt.inner_text == "Party" }.first.next.inner_text,
+    electorate: dts.select { |dt| dt.inner_text =~ /for/ }.first.next.next.inner_text
+  }
 
-record = {
-  name: eric.at(".title").inner_text,
-  party: dts.select { |dt| dt.inner_text == "Party" }.first.next.inner_text,
-  electorate: dts.select { |dt| dt.inner_text =~ /for/ }.first.next.next.inner_text
-}
-
-p record
+  p record
+end
 
 # # Find somehing on the page using css selectors
 # p page.at('div.content')
